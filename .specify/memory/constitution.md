@@ -58,6 +58,7 @@ Follow-up TODOs:
 - Titles must be clear and concise.
 - Descriptions must be 1–2 friendly sentences.
 
+
 ### 5. AI Usage & Verification Rules
 - No AI-generated text may be used without human review.
 - All content must be fact-checked before acceptance.
