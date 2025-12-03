@@ -41,6 +41,10 @@ As a book author/project manager, I want the system to generate a complete, high
 - How does the system handle an empty list of main topics, or if no expected number of chapters is provided?
 - What if the requested number of chapters is extremely high or very low, impacting logical progression?
 
+## Clarifications
+### Session 2025-12-04
+- Q: How should we define the data model for book inputs and chapter specifications? → A: Document the expected structure and types of book inputs and chapter specifications using informal descriptions.
+
 ## Requirements *(mandatory)*
 
 <!--
