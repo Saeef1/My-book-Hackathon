@@ -1,55 +1,89 @@
-# [PROJECT_NAME] Constitution
+<!--
+Version change: [CONSTITUTION_VERSION_OLD] -> 1.0.0
+Modified principles:
+- [PRINCIPLE_1_NAME] -> 1. Writing Tone & Style
+- [PRINCIPLE_2_NAME] -> 2. Docusaurus Structure & Formatting Rules
+- [PRINCIPLE_3_NAME] -> 3. File Naming Rules
+- [PRINCIPLE_4_NAME] -> 4. Sidebar & Navigation Conventions
+- [PRINCIPLE_5_NAME] -> 5. AI Usage & Verification Rules
+- [PRINCIPLE_6_NAME] -> 6. Quality & Editorial Standards
+- [SECTION_2_NAME] -> 7. Consistency Rules
+- [SECTION_3_NAME] -> 8. Prohibited Content
+Removed sections:
+- None explicitly removed, principles were replaced with concrete content.
+Added sections:
+- None explicitly added, principles were replaced with concrete content.
+Templates requiring updates:
+- .specify/templates/plan-template.md: ✅ updated (Constitution Check needs manual review)
+- .specify/templates/spec-template.md: ✅ updated
+- .specify/templates/tasks-template.md: ✅ updated
+Follow-up TODOs:
+- Manually review and update the "Constitution Check" section in .specify/templates/plan-template.md to reflect Docusaurus-specific rules.
+-->
+# Docusaurus Book Project Constitution
 <!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### 1. Writing Tone & Style
+- Use a friendly, simple, beginner-friendly writing style.
+- Keep paragraphs short (2–4 sentences).
+- Avoid academic or complex language.
+- Maintain a consistent voice throughout all chapters.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### 2. Docusaurus Structure & Formatting Rules
+- All book content MUST be stored inside: /content/chapters
+- Every chapter must be a Markdown (.md or .mdx) file.
+- Use valid Docusaurus-compatible Markdown syntax.
+- Required chapter structure:
+  - H1 Title at the top (`# Chapter Title`)
+  - Short introduction section
+  - Main content divided into H2 or H3 sections
+  - Summary section at the end
+- Use fenced code blocks ``` for examples.
+- Use only Markdown features supported by Docusaurus.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### 3. File Naming Rules
+- File names must be kebab-case, e.g., `introduction.md`, `chapter-1-getting-started.md`.
+- No spaces, no uppercase letters.
+- Each chapter file must start with a clear, descriptive name.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 4. Sidebar & Navigation Conventions
+- Every chapter must include proper frontmatter:
+  ```yaml
+  sidebar_label: Chapter Title
+  sidebar_position: <number>
+  description: A short, friendly description of the chapter.
+  ```
+- Titles must be clear and concise.
+- Descriptions must be 1–2 friendly sentences.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### 5. AI Usage & Verification Rules
+- No AI-generated text may be used without human review.
+- All content must be fact-checked before acceptance.
+- All claims must be accurate and clear.
+- AI drafts must be improved and verified by a human before being marked final.
 
-### [PRINCIPLE_6_NAME]
+### 6. Quality & Editorial Standards
+- All content must be original (no copying from external sources).
+- Avoid jargon unless defined.
+- Use examples and analogies when helpful.
+- Keep content tightly focused on the chapter goal.
+- Avoid filler, repetition, and long blocks of text.
 
+### 7. Consistency Rules
+- Use consistent terminology across all chapters.
+- Follow the same formatting pattern everywhere.
+- Maintain the same tone and voice from chapter to chapter.
 
-[PRINCIPLE__DESCRIPTION]
-
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### 8. Prohibited Content
+- No overly long paragraphs.
+- No unsupported claims.
+- No broken Markdown syntax.
+- No content that violates Docusaurus formatting capabilities.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This Constitution defines strict global rules that the AI must follow for ALL tasks, including specification, planning, writing, editing, and implementation. All rules are unambiguous and enforceable across the entire writing project. Amendments to this constitution require documentation and approval.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
+**Version**: 1.0.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-03
 <!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->

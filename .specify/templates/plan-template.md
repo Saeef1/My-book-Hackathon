@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] Content path: All book content MUST be stored in `/content/chapters`
+- [ ] File types: Chapters MUST be Markdown (.md or .mdx) files.
+- [ ] Markdown syntax: Use valid Docusaurus-compatible Markdown syntax ONLY.
+- [ ] Chapter structure: Each chapter MUST follow the H1, intro, H2/H3 sections, summary structure.
+- [ ] Code blocks: Use fenced code blocks (```) for all code examples.
+- [ ] File naming: All chapter filenames MUST be kebab-case (e.g., `chapter-name.md`).
+- [ ] Frontmatter: Each chapter MUST include proper frontmatter with `sidebar_label`, `sidebar_position`, and `description`.
 
 ## Project Structure
 
