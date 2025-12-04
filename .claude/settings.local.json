@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "SlashCommand(/sp.constitution:*)",
+      "Bash(.specify/scripts/bash/create-phr.sh:*)",
+      "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
