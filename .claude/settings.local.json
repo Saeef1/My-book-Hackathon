@@ -3,7 +3,8 @@
     "allow": [
       "SlashCommand(/sp.constitution:*)",
       "Bash(.specify/scripts/bash/create-phr.sh:*)",
-      "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)"
+      "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)",
+      "Bash(F:\\tester\\my-book\\.specify\\scripts\\bash\\create-phr.sh:*)"
     ],
     "deny": [],
     "ask": []

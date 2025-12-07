@@ -1,0 +1,20 @@
+# Humanoid Robot Lab Scene (Placeholder)
+
+This file (`humanoid_robot_lab.usd`) is a placeholder for an NVIDIA Isaac Sim scene.
+
+## Setup Instructions:
+
+1.  **Open NVIDIA Isaac Sim**: Launch Isaac Sim.
+2.  **Create a New Scene**: Start with a new, empty stage or load a suitable template.
+3.  **Add a Humanoid Robot Model**:
+    *   Navigate to the Omniverse Asset Library or your local asset repository.
+    *   Import a humanoid robot model (e.g., "Franka Emika Panda" if you are using it as a proxy for a humanoid, or a specific humanoid model if available).
+    *   Position the robot in the scene.
+4.  **Create a Simple Environment**:
+    *   Add a ground plane, some walls, and simple obstacles to create a basic laboratory-like environment.
+    *   Ensure the environment is suitable for navigation and object interaction.
+5.  **Save the Scene**: Save your newly created scene as `humanoid_robot_lab.usd` within this `isaac_sim_projects/scenes/` directory.
+
+## Goal:
+
+This scene will serve as the primary simulation environment for Module 3, providing a photorealistic setting for advanced perception, training, and navigation tasks with the humanoid robot.

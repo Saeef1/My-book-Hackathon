@@ -1,0 +1,136 @@
+name: ROS 2 Docusaurus CI
+
+on:
+  push:
+    branches:
+      - main
+      - '*-spec'
+  pull_request:
+    branches:
+      - main
+      - '*-spec'
+
+jobs:
+  lint-and-test-ros2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup ROS 2
+        uses: ros-tooling/setup-ros@v0.6
+        with:
+          ros-distro: humble # or iron
+          package-dependencies: humble
+      - name: Install Python dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip
+          pip install flake8 black
+      - name: Run ROS 2 Linting (C++)
+        run: |
+          cd ros2_ws
+          colcon build --packages-skip-build-tools --cmake-args -DBUILD_TESTING=ON # Build only what is needed for linting
+          colcon test --packages-select publisher_pkg subscriber_pkg add_two_ints_server add_two_ints_client --ament-cpplint # Adjust as needed
+      - name: Run ROS 2 Linting (Python)
+        run: |
+          cd ros2_ws/src
+          flake8 .
+          black --check .
+      - name: Install ROS dependencies
+        run: |
+          cd ros2_ws
+          rosdep install --from-paths src --ignore-src --rosdistro ${{ env.ROS_DISTRO }} -y
+      - name: Build ROS 2 workspace
+        run: |
+          cd ros2_ws
+          colcon build
+      - name: Run ROS 2 Unit Tests
+        run: |
+          cd ros2_ws
+          colcon test
+          colcon test --event-handlers console_direct+ --verbose
+          # Example for specific package:
+          # colcon test --packages-select publisher_pkg
+          # colcon test --packages-select subscriber_pkg
+
+  build-docusaurus-preview:
+    needs: lint-and-test-ros2
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: |
+          cd python-data-science-book
+          npm install
+      - name: Build Docusaurus
+        run: |
+          cd python-data-science-book
+          npm run build
+      - name: Deploy to GitHub Pages (optional, for preview)
+        # Add steps for deploying built Docusaurus site to a preview environment if needed.
+        # e.g., using peaceiris/actions-gh-pages@v3
+
+  gazebo-simulation-test:
+    needs: build-docusaurus-preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup ROS 2
+        uses: ros-tooling/setup-ros@v0.6
+        with:
+          ros-distro: humble # or iron
+          package-dependencies: humble
+      - name: Install Gazebo
+        run: |
+          sudo apt update
+          sudo apt install -y gazebo-ros-pkgs # Installs Gazebo and ROS interfaces
+      - name: Build ROS 2 workspace
+        run: |
+          cd ros2_ws
+          colcon build
+      - name: Run Headless Gazebo Simulation
+        run: |
+          # Source ROS 2 and local workspace
+          source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
+          source ros2_ws/install/setup.bash
+          # Set GAZEBO_MODEL_PATH for custom models
+          export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:$(pwd)/gazebo_sim/models
+          # Launch Gazebo with our custom world and robot
+          ros2 launch sim_bringup gazebo.launch.py world_file_path:=$(pwd)/gazebo_sim/worlds/empty.world
+          # Give Gazebo some time to load and stabilize
+          sleep 10
+      - name: Verify Sensor Data (non-visual)
+        run: |
+          # Example: check if /scan topic is active and publishing messages
+          ros2 topic info /scan > /dev/null 2>&1 || { echo "/scan topic not found or not publishing!"; exit 1; }
+          # Optionally, capture a few messages and check their structure or values
+          ros2 topic echo /scan --once --timeout 5 > /dev/null 2>&1 || { echo "/scan topic not publishing messages!"; exit 1; }
+          echo "Gazebo simulation and sensor data verification successful."
+
+  unity-build-validation:
+    needs: gazebo-simulation-test
+    runs-on: ubuntu-latest # Or windows-latest if Unity build requires Windows
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Unity Environment
+        # This is a placeholder. Real Unity build validation would require
+        # a more complex setup, potentially involving Unity's official GitHub Actions
+        # or custom Docker images with Unity installed.
+        run: echo "Unity build validation steps here. Requires Unity installation/setup."
+
+
+
+
+  unity-build-validation:
+    needs: gazebo-simulation-test
+    runs-on: ubuntu-latest # Or windows-latest if Unity build requires Windows
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Unity Environment
+        # This is a placeholder. Real Unity build validation would require
+        # a more complex setup, potentially involving Unity's official GitHub Actions
+        # or custom Docker images with Unity installed.
+

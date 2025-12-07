@@ -1,0 +1,134 @@
+# nav2_params.yaml
+# Placeholder for Nav2 configuration parameters for a bipedal humanoid.
+#
+# Instructions for human:
+# 1. Customize these parameters based on your robot's sensors, kinematics, and desired navigation behavior.
+# 2. Key areas to configure:
+#    - **Robot Parameters**:
+#      - `robot_radius`: Important for collision avoidance.
+#      - `footprint`: Define the shape of your robot for collision.
+#    - **Controller Server**:
+#      - `min_vel_x`, `max_vel_x`, `max_vel_theta`: Tune these for bipedal movement.
+#      - `use_collision_detection`: Enable/disable.
+#      - `critical_point_inflation`: For humanoid-specific collision avoidance.
+#    - **Planner Server**:
+#      - `planner_plugins`: Select appropriate planners (e.g., `GridBased` or specialized plugins).
+#      - `allow_unknown`: Whether the planner can go into unknown space.
+#    - **Behavior Tree**:
+#      - Configure behaviors for recovery (e.g., 'spin', 'backup').
+#    - **Costmap Filters**:
+#      - Consider using filters for specific humanoid navigation challenges (e.g., dynamic obstacles from legs).
+#    - **Local Costmap**:
+#      - `resolution`, `publish_frequency`, `transform_tolerance`.
+#      - `plugins`: Configure obstacle layers (static, obstacle, inflation) to accurately represent the environment for humanoid navigation.
+#        - `observation_sources`: Configure sensor inputs (LiDAR, Depth Camera, IMU) for costmap updates.
+#    - **Global Costmap**:
+#      - Similar configurations to local costmap, but for global path planning.
+# 3. Refer to the official Nav2 documentation for detailed explanations of each parameter:
+#    https://navigation.ros.org/configuration/packages/index.html
+
+# Example parameters (these are generic and will need tuning for a humanoid)
+# -----------------------------------------------------------------------
+
+amcl:
+  ros__parameters:
+    use_sim_time: True
+
+bt_navigator:
+  ros__parameters:
+    use_sim_time: True
+    global_frame: map
+    robot_base_frame: base_link
+    ## For more detailed configuration, refer to Nav2 documentation
+
+controller_server:
+  ros__parameters:
+    use_sim_time: True
+    # General controller parameters
+    min_vel_x: 0.05
+    max_vel_x: 0.2
+    max_vel_theta: 0.3
+    # ... other controller parameters ...
+    # Specific to bipedal: may need to adjust DWB or other controller types
+    # or implement a custom controller plugin for walking gaits.
+    # planner_reset_on_success: true # Example parameter
+
+planner_server:
+  ros__parameters:
+    use_sim_time: True
+    # General planner parameters
+    # planner_plugins: ["GridBased", "SmacPlannerHybrid"] # Example
+    # ... other planner parameters ...
+    # For humanoid: may need custom planner or adjusted parameters for bipedal movement constraints.
+
+recovery_server:
+  ros__parameters:
+    use_sim_time: True
+    # Example recoveries
+    # recoveries: ["spin", "backup"]
+
+# Local Costmap Configuration
+local_costmap:
+  ros__parameters:
+    use_sim_time: True
+    ros_topic: local_costmap/costmap_raw
+    global_frame: odom
+    robot_base_frame: base_link
+    update_frequency: 5.0
+    publish_frequency: 2.0
+    resolution: 0.05
+    width: 3.0
+    height: 3.0
+    # Add plugins for various sensor data
+    plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+    static_layer:
+      plugin: "nav2_costmap_2d::StaticLayer"
+      map_subscribe_topic: "/map"
+    obstacle_layer:
+      plugin: "nav2_costmap_2d::ObstacleLayer"
+      enabled: True
+      observation_sources: "scan camera_points imu" # Example sources
+      scan:
+        topic: /scan
+        max_obstacle_height: 2.0
+        min_obstacle_height: 0.0
+        # ... other LiDAR specific parameters
+      camera_points: # Example for depth camera point cloud
+        topic: /camera/depth/points
+        max_obstacle_height: 2.0
+        min_obstacle_height: 0.0
+        # ... other camera specific parameters
+      imu: # Example for IMU, potentially for pitch/roll to determine ground
+        topic: /imu/data
+        # ... IMU specific parameters
+    inflation_layer:
+      plugin: "nav2_costmap_2d::InflationLayer"
+      cost_scaling_factor: 3.0
+      inflation_radius: 0.5
+      # For humanoids, need to be careful with inflation around feet/legs
+
+# Global Costmap Configuration
+global_costmap:
+  ros__parameters:
+    use_sim_time: True
+    ros_topic: global_costmap/costmap_raw
+    global_frame: map
+    robot_base_frame: base_link
+    update_frequency: 1.0
+    publish_frequency: 1.0
+    resolution: 0.05
+    track_unknown_space: True
+    always_send_full_costmap: True
+    plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+    static_layer:
+      plugin: "nav2_costmap_2d::StaticLayer"
+      map_subscribe_topic: "/map"
+    obstacle_layer:
+      plugin: "nav2_costmap_2d::ObstacleLayer"
+      enabled: True
+      observation_sources: "scan camera_points imu" # Example sources
+      # ... other parameters
+    inflation_layer:
+      plugin: "nav2_costmap_2d::InflationLayer"
+      cost_scaling_factor: 3.0
+      inflation_radius: 0.5

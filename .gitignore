@@ -1,0 +1,44 @@
+# Git
+.git/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+*.egg-info/
+
+# C++
+build/
+bin/
+obj/
+out/
+*.o
+*.so
+*.a
+*.exe
+*.dll
+
+# Node.js/Docusaurus
+node_modules/
+dist/
+build/
+*.log
+.env*
+.docusaurus/
+.cache/
+website/build/
+
+# ROS 2
+install/
+log/
+build/
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

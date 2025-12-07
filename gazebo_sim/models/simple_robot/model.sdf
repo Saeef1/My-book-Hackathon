@@ -1,0 +1,232 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="simple_robot">
+    <link name="base_link">
+      <inertial>
+        <mass>1.0</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <visual>
+        <geometry>
+          <box>
+            <size>0.2 0.2 0.2</size>
+          </box>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <box>
+            <size>0.2 0.2 0.2</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="lidar_link">
+      <pose>0.1 0 0.1 0 0 0</pose> <!-- Position relative to base_link -->
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="base_to_lidar_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>lidar_link</child>
+    </joint>
+
+    <plugin name="gazebo_ros_lidar_controller" filename="libgazebo_ros_laser.so">
+      <topicName>/scan</topicName>
+      <frameName>lidar_link</frameName>
+      <horizontal>
+        <samples>640</samples>
+        <resolution>1</resolution>
+        <min_angle>-1.570796</min_angle>
+        <max_angle>1.570796</max_angle>
+      </horizontal>
+      <vertical>
+        <samples>1</samples>
+        <resolution>1</resolution>
+        <min_angle>0</min_angle>
+        <max_angle>0</max_angle>
+      </vertical>
+      <range>
+        <min>0.08</min>
+        <max>10.0</max>
+        <resolution>0.01</resolution>
+      </range>
+      <noise>
+        <type>gaussian</type>
+        <mean>0.0</mean>
+        <stddev>0.01</stddev>
+      </noise>
+      <ros>
+        <remapping>~/out:=/scan</remapping>
+      </ros>
+    </plugin>
+
+    <link name="camera_link">
+      <pose>0 0.1 0.1 0 0 0</pose> <!-- Position relative to base_link -->
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0001</iyy>
+          <iyz>0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <visual>
+        <geometry>
+          <box>
+            <size>0.02 0.05 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box>
+            <size>0.02 0.05 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="base_to_camera_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>camera_link</child>
+    </joint>
+
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>30.0</updateRate>
+      <cameraName>camera</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_link</frameName>
+      <hackBaseline>0.07</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+      <Cx>320</Cx>
+      <Cy>240</Cy>
+      <Fx>277.1935</Fx>
+      <Fy>277.1935</Fy>
+      <ros>
+        <namespace></namespace>
+        <remapping>~/image_raw:=/camera/image_raw</remapping>
+        <remapping>~/camera_info:=/camera/camera_info</remapping>
+      </ros>
+    </plugin>
+
+    <link name="imu_link">
+      <pose>0 0 0.1 0 0 0</pose> <!-- Position relative to base_link -->
+      <inertial>
+        <mass>0.01</mass>
+        <inertia>
+          <ixx>0.000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.000001</izz>
+        </inertia>
+      </inertial>
+      <visual>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 0 1 1</ambient>
+          <diffuse>1 0 1 1</diffuse>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="base_to_imu_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>imu_link</child>
+    </joint>
+
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+      <ros>
+        <namespace></namespace>
+        <remapping>~/out:=/imu/data</remapping>
+      </ros>
+      <initialOrientationAsReference>false</initialOrientationAsReference>
+      <update_rate>100.0</update_rate>
+      <imu>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>2e-4</stddev>
+        </noise>
+        <gyroscope>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+          </noise>
+        </gyroscope>
+        <accelerometer>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+          </noise>
+        </accelerometer>
+      </imu>
+    </plugin>
+  </model>
+</sdf>

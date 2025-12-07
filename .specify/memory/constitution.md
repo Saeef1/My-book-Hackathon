@@ -1,18 +1,9 @@
 <!--
 Sync Impact Report:
-Version change: None -> 1.0.0
-Modified principles:
-  - Writing Tone & Style
-  - Structure & File Organization
-  - AI Usage & Verification
-  - Consistency Rules
-  - Quality Requirements
-  - Editorial Guidelines
-Added sections: None
-Removed sections:
-  - SECTION_2_NAME
-  - SECTION_3_NAME
-  - Governance Rules (explicitly removed from template, implicit covered by principles)
+Version change: 1.0.0 -> 1.0.1 (Patch: Wording, new sections, formatting)
+Modified principles: None
+Added sections: Purpose & Scope, Writing Tone & Voice, Document Architecture & Docusaurus Rules, Module & Chapter Format, Code & Example Rules, Diagrams & Assets, Specification & Plan Format, Acceptance Criteria & QA checks, Banned Behaviors & Hallucination Rules, Update / Versioning Policy
+Removed sections: None
 Templates requiring updates:
   - .specify/templates/plan-template.md: ⚠ pending
   - .specify/templates/spec-template.md: ⚠ pending
@@ -20,29 +11,72 @@ Templates requiring updates:
   - .specify/templates/commands/*.md: ⚠ pending
 Follow-up TODOs: None
 -->
-# Book Constitution
+---
+title: "/sp.constitution — Physical AI & Humanoid Robotics"
+version: "1.0.0"
+author: "Spec-Agent"
+---
 
-## Core Principles
+# Project Constitution
 
-### 1. Writing Tone & Style
-The book must use a friendly, simple, and approachable tone. Avoid overly academic or complex language. Use short paragraphs only (2–4 sentences max). Explanations should be clear, human-readable, and easy for beginners.
+## Purpose & Scope
+This constitution defines the principles, guidelines, and standards for the development of documentation related to Physical AI & Humanoid Robotics. It covers all aspects from writing tone to document architecture, ensuring consistency and quality across all artifacts.
 
-### 2. Structure & File Organization
-All book content must be stored in: `/content/chapters`. Each chapter file must follow a consistent structure: Title, Short introduction, Main content in small sections, Examples (optional), Summary.
+## Writing Tone & Voice
+Tone: formal, technical, modular, hands-on; no marketing or storytelling. The language used must be precise and objective.
 
-### 3. AI Usage & Verification
-No AI-generated text may be used without human verification. Every generated paragraph must be reviewed for correctness, clarity, and tone. Any claims or facts must be checked manually before acceptance. AI drafts are allowed, but humans must approve all final text.
+## Document Architecture & Docusaurus Rules
+All documentation must be compatible with Docusaurus. Pages should use a YAML frontmatter for metadata.
+Example YAML frontmatter:
+```yaml
+---
+title: "My Docusaurus Page"
+---
+```
 
-### 4. Consistency Rules
-Maintain consistent terminology throughout the book. Style must remain friendly and simple across all chapters. Formatting must follow the same pattern: Headings use H1–H3, Bullet points for lists, Short paragraphs only, No long blocks of text.
+## Module & Chapter Format (exact template)
+Each module or chapter markdown file must adhere to the following template:
 
-### 5. Quality Requirements
-Content must be original and not copied from external sources. All examples must be correct and tested (if applicable). The content must be free of factual errors. The tone, structure, and clarity must match this constitution before a chapter is accepted.
+```markdown
+# Module/Chapter Title
 
-### 6. Editorial Guidelines
-Avoid unnecessary jargon. Use examples and analogies whenever helpful. Keep sections focused — no off-topic content. Each chapter should flow logically from the previous one.
+## Introduction
+A brief, concise introduction to the module/chapter's content.
+
+## Section 1: Topic A
+Content for Topic A.
+
+## Section 2: Topic B
+Content for Topic B.
+
+### Sub-section: Detail of Topic B
+Detailed content for a sub-topic.
+
+## Conclusion
+A summary of the key takeaways from the module/chapter.
+```
+
+## Code & Example Rules (language, snippet size, runnable flags)
+Code examples must be provided in Python or JavaScript. Snippets should be concise, focusing on demonstrating a single concept, and generally not exceeding 20 lines. Each code block must include 'run-instruction' comment explaining how to execute.
+
+## Diagrams & Assets (naming rules, alt-text, formats)
+All diagrams and assets must be stored in `assets/` directory. File names should be descriptive and in `kebab-case`. Images must include `alt-text` for accessibility. Preferred formats are `.svg` for diagrams and `.png` for screenshots.
+
+## Specification & Plan Format (what /sp.specify, /sp.plan, /sp.task must include)
+- `/sp.specify`: Must include a clear problem statement, user stories, functional and non-functional requirements, and acceptance criteria.
+- `/sp.plan`: Must detail architectural decisions, design choices, API contracts, and a breakdown of implementation steps.
+- `/sp.tasks`: Must outline granular, testable tasks derived from the plan, with clear definitions of done for each.
+
+## Acceptance Criteria & QA checks
+All features and documentation must meet defined acceptance criteria. QA checks will include: content accuracy, adherence to style guidelines, Docusaurus compatibility, and code example correctness.
+
+## Banned Behaviors & Hallucination Rules
+Never invent hardware or prices — use only items listed in context7. Always reference MCP context7 for course facts before adding new facts. Any information not verifiable through context7 must be explicitly marked as speculative. Avoid all forms of hallucination.
+
+## Update / Versioning Policy
+This constitution will be versioned using semantic versioning (MAJOR.MINOR.PATCH). Amendments will follow a formal review and approval process, with changes documented in the Sync Impact Report.
 
 ## Governance
 This constitution supersedes all other practices. Amendments require documentation, approval, and a migration plan. All PRs/reviews must verify compliance. Complexity must be justified.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-01 | **Last Amended**: 2025-12-01
+**Version**: 1.0.1 | **Ratified**: 2025-12-06 | **Last Amended**: 2025-12-06
