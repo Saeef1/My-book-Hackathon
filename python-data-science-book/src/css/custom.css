@@ -3,28 +3,174 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-font-family-base: 'Poppins', sans-serif;
+  --ifm-color-primary: #2563eb; /* Professional blue */
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  --ifm-color-secondary: #64748b; /* Professional gray */
+  --ifm-color-success: #10b981; /* Professional green */
+  --ifm-color-info: #0ea5e9; /* Professional blue */
+  --ifm-color-warning: #f59e0b; /* Professional yellow */
+  --ifm-color-danger: #ef4444; /* Professional red */
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-container-width: 1400px;
+  --ifm-container-padding-horizontal: 2rem;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #2563eb;
+  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #bfdbfe;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Professional button styling */
+.button--secondary {
+  --ifm-button-background-color: var(--ifm-color-secondary);
+  --ifm-button-border-color: var(--ifm-color-secondary);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button--secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.button--primary {
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Professional navbar styling */
+.navbar {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  padding: 0.75rem 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgba(17, 24, 39, 0.95);
+}
+
+.navbar__title {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+/* Professional sidebar styling */
+.menu {
+  font-size: 0.9rem;
+}
+
+.menu__list-item {
+  margin-bottom: 0.25rem;
+}
+
+.menu__link {
+  border-radius: 6px;
+  margin: 2px 0;
+}
+
+/* Professional card styling */
+.card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Professional typography */
+.hero__title {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero__subtitle {
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Professional footer styling */
+.footer {
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  padding: 3rem 0 2rem;
+}
+
+[data-theme='dark'] .footer {
+  background-color: #111827;
+  border-top: 1px solid #374151;
+}
+
+/* Professional container spacing */
+.container {
+  padding: 0 1.5rem;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Professional animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-wrapper {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Code block styling */
+.code-block {
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Table styling */
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }

@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Python Data Science Book',
-  tagline: 'A comprehensive guide to Python for Data Science',
+  title: 'Python Data Science Textbook',
+  tagline: 'A Comprehensive Guide to Python for Data Science',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://your-python-data-science-book.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -46,23 +46,13 @@ const config: Config = {
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
         theme: {
           customCss: './src/css/custom.css',
+        },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+          filename: 'sitemap.xml',
         },
       } satisfies Preset.Options,
     ],
@@ -75,9 +65,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Python Data Science Book',
+      title: 'Python Data Science Textbook',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Python Data Science Textbook Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -85,9 +75,8 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Documentation',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
@@ -99,46 +88,50 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Documentation',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Getting Started',
               to: '/docs/intro',
             },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Tutorial Basics',
+              to: '/docs/tutorial-basics/create-a-page',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Advanced Topics',
+              to: '/docs/physical-ai-humanoid-robotics/',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Resources',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
+              label: 'GitHub Repository',
               href: 'https://github.com/facebook/docusaurus',
+            },
+            {
+              label: 'Docusaurus Docs',
+              href: 'https://docusaurus.io/docs',
+            },
+          ],
+        },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Privacy Policy',
+              href: '#',
+            },
+            {
+              label: 'Terms of Service',
+              href: '#',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Python Data Science Book. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Python Data Science Textbook. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
