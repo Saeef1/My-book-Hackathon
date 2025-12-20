@@ -4,7 +4,18 @@
       "SlashCommand(/sp.constitution:*)",
       "Bash(.specify/scripts/bash/create-phr.sh:*)",
       "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)",
-      "Bash(F:\\tester\\my-book\\.specify\\scripts\\bash\\create-phr.sh:*)"
+      "Bash(F:\\tester\\my-book\\.specify\\scripts\\bash\\create-phr.sh:*)",
+      "Bash(dir \"F:\\tester\\my-book\\specs\\1-embedding-pipeline\" -PathType Leaf)",
+      "Bash(ls -d specs/*-openai-agent-qdrant-retrieval)",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
+      "Bash(python main.py)",
+      "Bash(python rag_bot.py)",
+      "Bash(python -c \"from qdrant_client import QdrantClient; import os; client = QdrantClient(url=os.getenv(''QDRANT_URL''), api_key=os.getenv(''QDRANT_API_KEY'')); print([method for method in dir(client) if not method.startswith(''_'')][:20])\")",
+      "Bash(python -c \"\nfrom qdrant_client import QdrantClient\nimport os\n# Check if search method exists\nclient = QdrantClient(url=os.getenv(''QDRANT_URL''), api_key=os.getenv(''QDRANT_API_KEY''))\nprint(''search method exists:'', hasattr(client, ''search''))\nprint(''query_points method exists:'', hasattr(client, ''query_points''))\n\")",
+      "Bash(timeout 30s python rag_bot.py cohere)",
+      "Bash(python -c \"from rag_bot import RAGBot; bot = RAGBot\\(\\); results = bot.search_similar\\(''What is this documentation about?'', top_k=3\\); print\\(''Results:''\\); [print\\(f''- Source: {r[\"\"source_url\"\"]}, Content: {r[\"\"content\"\"][:100]}...''\\) for r in results]\")",
+      "Bash(mkdir -p python-data-science-book/src/components/Homepage python-data-science-book/src/components python-data-science-book/src/css)",
+      "Bash(npx docusaurus start --port 3001)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,275 @@
+# API Contract: Qdrant Retrieval Service
+
+## Overview
+This contract defines the API endpoints for retrieving data from Qdrant vector database. The service provides various methods to fetch stored embeddings and associated document content for RAG-based applications.
+
+## Base URL
+```
+http://localhost:8000/api/v1
+```
+
+## Authentication
+No authentication required for local development. For production deployments, API key authentication may be implemented via `X-API-Key` header.
+
+## Endpoints
+
+### 1. Retrieve Document by ID
+Retrieve a specific document from Qdrant by its ID.
+
+```
+GET /retrieval/{collection_name}/documents/{document_id}
+```
+
+#### Path Parameters
+- `collection_name` (string, required): Name of the Qdrant collection
+- `document_id` (string, required): ID of the document to retrieve
+
+#### Query Parameters
+- `with_payload` (boolean, optional): Include payload in response (default: true)
+- `with_vectors` (boolean, optional): Include vectors in response (default: false)
+
+#### Request Headers
+```
+Content-Type: application/json
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "id": "string",
+  "content": "string",
+  "embedding": [0.1, 0.2, 0.3, ...],
+  "metadata": {
+    "source_url": "string",
+    "title": "string",
+    "section": "string",
+    "created_at": "ISO8601 timestamp",
+    "updated_at": "ISO8601 timestamp"
+  },
+  "collection_name": "string",
+  "status": "success"
+}
+```
+
+**Error Response (404 Not Found):**
+```json
+{
+  "error": "Document not found",
+  "message": "Document with ID {document_id} not found in collection {collection_name}",
+  "status": "error"
+}
+```
+
+### 2. Similarity Search
+Perform a similarity search using a query vector or text.
+
+```
+POST /retrieval/{collection_name}/search
+```
+
+#### Path Parameters
+- `collection_name` (string, required): Name of the Qdrant collection
+
+#### Request Headers
+```
+Content-Type: application/json
+```
+
+#### Request Body
+```json
+{
+  "query_text": "string",
+  "query_embedding": [0.1, 0.2, 0.3, ...],
+  "limit": 10,
+  "filters": {
+    "source_url": "string",
+    "metadata_filters": {}
+  },
+  "search_params": {
+    "with_payload": true,
+    "with_vectors": false
+  }
+}
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "results": [
+    {
+      "id": "string",
+      "content": "string",
+      "embedding": [0.1, 0.2, 0.3, ...],
+      "metadata": {
+        "source_url": "string",
+        "title": "string",
+        "section": "string",
+        "created_at": "ISO8601 timestamp",
+        "updated_at": "ISO8601 timestamp"
+      },
+      "score": 0.85,
+      "collection_name": "string"
+    }
+  ],
+  "query_id": "string",
+  "execution_time": 125.5,
+  "total_count": 10,
+  "query_text": "string",
+  "status": "success"
+}
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "error": "Invalid request",
+  "message": "Either query_text or query_embedding must be provided",
+  "status": "error"
+}
+```
+
+### 3. List Collections
+List all available Qdrant collections.
+
+```
+GET /retrieval/collections
+```
+
+#### Request Headers
+```
+Content-Type: application/json
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "collections": [
+    {
+      "name": "string",
+      "size": 1536,
+      "count": 1000,
+      "created_at": "ISO8601 timestamp"
+    }
+  ],
+  "status": "success"
+}
+```
+
+### 4. Test Connection
+Test the connection to the Qdrant database.
+
+```
+GET /retrieval/health
+```
+
+#### Request Headers
+```
+Content-Type: application/json
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "status": "healthy",
+  "qdrant_version": "string",
+  "collections_count": 5
+}
+```
+
+**Error Response (503 Service Unavailable):**
+```json
+{
+  "error": "Connection failed",
+  "message": "Unable to connect to Qdrant database",
+  "status": "unhealthy"
+}
+```
+
+## Error Responses
+
+### Common Error Format
+```json
+{
+  "error": "string",
+  "message": "string",
+  "status": "error"
+}
+```
+
+### HTTP Status Codes
+- `200 OK`: Request successful
+- `400 Bad Request`: Invalid request parameters or body
+- `404 Not Found`: Requested resource does not exist
+- `500 Internal Server Error`: Server error occurred
+- `503 Service Unavailable`: Unable to connect to Qdrant
+
+## Data Types
+
+### QueryRequest
+```json
+{
+  "query_text": "string",
+  "query_embedding": "array of floats",
+  "collection_name": "string",
+  "limit": "integer",
+  "filters": "object",
+  "search_params": "object"
+}
+```
+
+### RetrievedDocument
+```json
+{
+  "id": "string",
+  "content": "string",
+  "embedding": "array of floats",
+  "metadata": "object",
+  "score": "float",
+  "collection_name": "string"
+}
+```
+
+### QueryResponse
+```json
+{
+  "results": "array of RetrievedDocument",
+  "query_id": "string",
+  "execution_time": "float",
+  "total_count": "integer",
+  "query_text": "string",
+  "status": "string"
+}
+```
+
+## Validation Rules
+
+1. Query text must be non-empty when provided
+2. Query embedding must be an array of floats with consistent dimensions
+3. Limit must be between 1 and 1000
+4. Collection names must follow Qdrant naming conventions
+5. Document IDs must be valid identifiers in Qdrant
+
+## Example Requests
+
+### Similarity Search with Text Query
+```bash
+curl -X POST http://localhost:8000/api/v1/retrieval/teacher_embedding/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query_text": "How to implement RAG with embeddings?",
+    "limit": 5,
+    "search_params": {
+      "with_payload": true,
+      "with_vectors": false
+    }
+  }'
+```
+
+### Retrieve Document by ID
+```bash
+curl -X GET "http://localhost:8000/api/v1/retrieval/teacher_embedding/documents/doc_123?with_payload=true&with_vectors=false"
+```

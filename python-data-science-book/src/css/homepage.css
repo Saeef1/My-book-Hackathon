@@ -1,0 +1,73 @@
+/*
+ * Homepage-specific styles
+ * This file contains additional styles that may be used across homepage components
+ */
+
+/* Typography enhancements for the homepage */
+.homepage-typography {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Additional layout utilities for the homepage */
+.homepage-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Responsive adjustments for various screen sizes */
+@media (max-width: 1200px) {
+  .homepage-container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 0 0.75rem;
+  }
+}
+
+/* Animation utilities for hover effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Focus styles for accessibility */
+.focus-outline {
+  outline: 2px solid #4f6fef;
+  outline-offset: 2px;
+}
+
+/* Utility classes for spacing */
+.spacing-section {
+  margin: 4rem 0;
+}
+
+.spacing-section-large {
+  margin: 6rem 0;
+}
+
+.spacing-section-small {
+  margin: 2rem 0;
+}
+
+/* Dark mode considerations if needed in the future */
+@media (prefers-color-scheme: dark) {
+  .homepage-dark-enabled {
+    /* Styles for dark mode */
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

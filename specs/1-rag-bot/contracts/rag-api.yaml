@@ -1,0 +1,321 @@
+openapi: 3.0.0
+info:
+  title: RAG Bot API
+  description: API for the RAG Bot that answers questions about the Python Data Science Book
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.python-data-science-book.com
+    description: Production server
+
+paths:
+  /query:
+    post:
+      summary: Submit a query to the RAG bot
+      description: Process a user query against the indexed Python Data Science Book content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Successful response with answer and sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Bad request - invalid query format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /status:
+    get:
+      summary: Check system status
+      description: Verify that the RAG system is operational and ready to process queries
+      responses:
+        '200':
+          description: System is operational
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '503':
+          description: System is not ready (e.g., embeddings not loaded)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sources:
+    get:
+      summary: Get indexed sources
+      description: Retrieve a list of all sources that have been indexed for the RAG system
+      responses:
+        '200':
+          description: List of indexed sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourcesResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /config:
+    get:
+      summary: Get system configuration
+      description: Retrieve current system configuration including available providers
+      responses:
+        '200':
+          description: Current system configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+    patch:
+      summary: Update system configuration
+      description: Update system configuration (requires admin privileges)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigUpdateRequest'
+      responses:
+        '200':
+          description: Configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+        '401':
+          description: Unauthorized - admin privileges required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The user's question or query
+          example: "What is pandas used for in data science?"
+        provider:
+          type: string
+          description: AI provider to use for response generation
+          enum: [openai, gemini, cohere]
+          default: openai
+        max_results:
+          type: integer
+          description: Maximum number of results to retrieve
+          default: 5
+          minimum: 1
+          maximum: 10
+        similarity_threshold:
+          type: number
+          description: Minimum similarity score for retrieved documents
+          default: 0.5
+          minimum: 0.0
+          maximum: 1.0
+
+    QueryResponse:
+      type: object
+      required:
+        - answer
+        - sources
+        - query
+        - confidence
+      properties:
+        answer:
+          type: string
+          description: The generated answer to the user's query
+          example: "Pandas is a Python library used for data manipulation and analysis..."
+        sources:
+          type: array
+          items:
+            type: string
+          description: List of source URLs used to generate the answer
+          example: ["https://python-data-science-book.com/intro-to-pandas", "https://python-data-science-book.com/data-manipulation"]
+        query:
+          type: string
+          description: The original query text
+          example: "What is pandas used for in data science?"
+        confidence:
+          type: number
+          description: Confidence score for the response
+          minimum: 0.0
+          maximum: 1.0
+          example: 0.85
+        context_chunks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContextChunk'
+          description: The context chunks used to generate the response
+        execution_time:
+          type: number
+          description: Time taken to process the query in seconds
+          example: 1.23
+
+    ContextChunk:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the context chunk
+          example: "Pandas is a powerful Python library for data manipulation and analysis..."
+        source_url:
+          type: string
+          description: The URL where this content was found
+          example: "https://python-data-science-book.com/intro-to-pandas"
+        source_title:
+          type: string
+          description: The title of the source document
+          example: "Introduction to Pandas"
+        score:
+          type: number
+          description: Similarity score for this chunk
+          example: 0.87
+
+    StatusResponse:
+      type: object
+      required:
+        - status
+        - ready
+      properties:
+        status:
+          type: string
+          description: Current system status
+          example: "operational"
+        ready:
+          type: boolean
+          description: Whether the system is ready to process queries
+          example: true
+        indexed_documents:
+          type: integer
+          description: Number of documents currently indexed
+          example: 150
+        last_indexed:
+          type: string
+          format: date-time
+          description: When the last indexing operation was completed
+          example: "2025-12-17T10:30:00Z"
+
+    SourcesResponse:
+      type: object
+      required:
+        - sources
+      properties:
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+          description: List of all indexed sources
+
+    Source:
+      type: object
+      required:
+        - url
+        - title
+        - indexed_at
+      properties:
+        url:
+          type: string
+          description: The source URL
+          example: "https://python-data-science-book.com/intro-to-pandas"
+        title:
+          type: string
+          description: The title of the source
+          example: "Introduction to Pandas"
+        indexed_at:
+          type: string
+          format: date-time
+          description: When this source was indexed
+          example: "2025-12-16T14:30:00Z"
+        chunk_count:
+          type: integer
+          description: Number of chunks created from this source
+          example: 12
+
+    ConfigResponse:
+      type: object
+      required:
+        - providers
+        - default_provider
+        - max_results
+      properties:
+        providers:
+          type: array
+          items:
+            type: string
+          description: Available AI providers
+          example: ["openai", "gemini", "cohere"]
+        default_provider:
+          type: string
+          description: Default AI provider
+          example: "openai"
+        max_results:
+          type: integer
+          description: Default maximum number of results to retrieve
+          example: 5
+        similarity_threshold:
+          type: number
+          description: Default similarity threshold
+          example: 0.5
+
+    ConfigUpdateRequest:
+      type: object
+      properties:
+        default_provider:
+          type: string
+          description: New default AI provider
+          enum: [openai, gemini, cohere]
+        max_results:
+          type: integer
+          description: New default maximum number of results
+          minimum: 1
+          maximum: 10
+        similarity_threshold:
+          type: number
+          description: New default similarity threshold
+          minimum: 0.0
+          maximum: 1.0
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "QUERY_PROCESSING_ERROR"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Failed to process query due to API error"
+        details:
+          type: object
+          description: Additional error details (optional)
+          example: {"provider": "openai", "status_code": 429}

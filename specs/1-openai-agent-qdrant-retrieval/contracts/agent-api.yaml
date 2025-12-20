@@ -1,0 +1,271 @@
+# API Contract: OpenAI Agent with Qdrant Retrieval
+
+## Overview
+This contract defines the API endpoints for the OpenAI Agent with Qdrant retrieval functionality. The service provides methods to interact with the agent, perform retrieval-augmented generation, and manage conversation state.
+
+## Base URL
+```
+http://localhost:8000/api/v1
+```
+
+## Authentication
+API key authentication required via `X-API-Key` header for all endpoints.
+
+## Endpoints
+
+### 1. Agent Query
+Send a query to the OpenAI Agent and receive a grounded response based on Qdrant retrieval.
+
+```
+POST /agent/query
+```
+
+#### Request Headers
+```
+Content-Type: application/json
+X-API-Key: <your-api-key>
+```
+
+#### Request Body
+```json
+{
+  "query": "What are the best practices for RAG systems?",
+  "user_id": "user_123",
+  "session_id": "session_456",
+  "retrieval_params": {
+    "max_results": 5,
+    "similarity_threshold": 0.7,
+    "filters": {
+      "source_url": "https://example.com/docs"
+    }
+  }
+}
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "response_text": "Best practices for RAG systems include proper document chunking, using high-quality embeddings, implementing effective retrieval strategies, and ensuring source attribution in responses...",
+  "query_id": "query_789",
+  "execution_time": 1542.3,
+  "retrieved_documents": [
+    {
+      "id": "doc_1",
+      "content": "Document content here...",
+      "metadata": {
+        "source_url": "https://example.com/docs/best-practices",
+        "title": "Best Practices for RAG Systems"
+      },
+      "score": 0.89,
+      "collection_name": "teacher_embedding"
+    }
+  ],
+  "sources": [
+    "https://example.com/docs/best-practices"
+  ],
+  "confidence": 0.92,
+  "status": "success"
+}
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "error": "Invalid request",
+  "message": "Query text is required",
+  "status": "error"
+}
+```
+
+**Error Response (503 Service Unavailable):**
+```json
+{
+  "error": "Service unavailable",
+  "message": "Unable to connect to OpenAI or Qdrant services",
+  "status": "unavailable"
+}
+```
+
+### 2. Agent Health Check
+Check the health status of the agent and its connections to external services.
+
+```
+GET /agent/health
+```
+
+#### Request Headers
+```
+X-API-Key: <your-api-key>
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "status": "healthy",
+  "openai_connected": true,
+  "qdrant_connected": true,
+  "collections_count": 3,
+  "last_updated": "2025-12-16T10:30:00Z"
+}
+```
+
+**Error Response (503 Service Unavailable):**
+```json
+{
+  "status": "unhealthy",
+  "openai_connected": false,
+  "qdrant_connected": true,
+  "error": "OpenAI API connection failed"
+}
+```
+
+### 3. Start New Session
+Initialize a new conversation session with the agent.
+
+```
+POST /agent/session
+```
+
+#### Request Headers
+```
+Content-Type: application/json
+X-API-Key: <your-api-key>
+```
+
+#### Request Body
+```json
+{
+  "user_id": "user_123",
+  "initial_context": "User is interested in RAG system implementations"
+}
+```
+
+#### Response
+**Success Response (201 Created):**
+```json
+{
+  "session_id": "session_456",
+  "status": "created",
+  "created_at": "2025-12-16T10:30:00Z"
+}
+```
+
+### 4. List Collections
+List all available Qdrant collections that can be used for retrieval.
+
+```
+GET /agent/collections
+```
+
+#### Request Headers
+```
+X-API-Key: <your-api-key>
+```
+
+#### Response
+**Success Response (200 OK):**
+```json
+{
+  "collections": [
+    {
+      "name": "teacher_embedding",
+      "size": 384,
+      "count": 1250,
+      "created_at": "2025-12-15T09:15:00Z"
+    }
+  ],
+  "status": "success"
+}
+```
+
+## Error Responses
+
+### Common Error Format
+```json
+{
+  "error": "string",
+  "message": "string",
+  "status": "error"
+}
+```
+
+### HTTP Status Codes
+- `200 OK`: Request successful
+- `201 Created`: Resource created successfully
+- `400 Bad Request`: Invalid request parameters or body
+- `401 Unauthorized`: Invalid or missing API key
+- `500 Internal Server Error`: Server error occurred
+- `503 Service Unavailable`: External service (OpenAI/Qdrant) unavailable
+
+## Data Types
+
+### AgentConfiguration
+```json
+{
+  "openai_api_key": "string",
+  "qdrant_url": "string",
+  "qdrant_api_key": "string",
+  "collection_name": "string",
+  "model": "string",
+  "max_chunks": "integer",
+  "similarity_threshold": "float",
+  "system_prompt": "string"
+}
+```
+
+### RetrievedDocument
+```json
+{
+  "id": "string",
+  "content": "string",
+  "embedding": "array of floats",
+  "metadata": "object",
+  "score": "float",
+  "collection_name": "string"
+}
+```
+
+### AgentResponse
+```json
+{
+  "response_text": "string",
+  "query_id": "string",
+  "execution_time": "float",
+  "retrieved_documents": "array of RetrievedDocument",
+  "sources": "array of strings",
+  "confidence": "float",
+  "status": "string"
+}
+```
+
+## Validation Rules
+
+1. Query text must be non-empty when provided
+2. Max results must be between 1 and 20
+3. Similarity threshold must be between 0 and 1
+4. Collection names must exist in Qdrant
+5. API keys must be valid and properly formatted
+
+## Example Requests
+
+### Agent Query with Retrieval
+```bash
+curl -X POST http://localhost:8000/api/v1/agent/query \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your_api_key_here" \
+  -d '{
+    "query": "How do I implement a RAG system?",
+    "retrieval_params": {
+      "max_results": 5,
+      "similarity_threshold": 0.7
+    }
+  }'
+```
+
+### Health Check
+```bash
+curl -X GET http://localhost:8000/api/v1/agent/health \
+  -H "X-API-Key: your_api_key_here"
+```

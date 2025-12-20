@@ -1,39 +1,10 @@
 import type {ReactNode} from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import Heading from '@theme/Heading';
 
-import styles from './index.module.css';
-
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <div className={styles.heroContent}>
-          <Heading as="h1" className="hero__title">
-            {siteConfig.title}
-          </Heading>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <div className={styles.buttons}>
-            <Link
-              className="button button--secondary button--lg"
-              to="/docs/intro">
-              Start Learning →
-            </Link>
-            <Link
-              className="button button--primary button--lg"
-              to="/docs/intro">
-              Read Documentation
-            </Link>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
+import HeroSection from '../components/Homepage/HeroSection';
+import ModulesGrid from '../components/Homepage/ModulesGrid';
+import { homepageContent } from '../data/modules-data';
 
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
@@ -41,7 +12,12 @@ export default function Home(): ReactNode {
     <Layout
       title={`Welcome to ${siteConfig.title}`}
       description="A comprehensive guide to Python for Data Science">
-      <HomepageHeader />
+      <HeroSection
+        title={homepageContent.title}
+        subtitle={homepageContent.subtitle}
+        readMorePath={homepageContent.readMorePath}
+      />
+      <ModulesGrid modules={homepageContent.modules} />
     </Layout>
   );
 }

@@ -1,0 +1,68 @@
+# Homepage API Contract
+
+## Module Data Endpoint
+
+**GET** `/api/modules`
+
+### Description
+Retrieves the list of book modules/chapters for display on the homepage.
+
+### Request
+- **Method**: GET
+- **Path**: `/api/modules`
+- **Headers**: None required
+- **Parameters**: None
+
+### Response
+- **Status**: 200 OK
+- **Content-Type**: application/json
+
+### Response Schema
+```json
+{
+  "modules": [
+    {
+      "id": "string or number",
+      "number": "number",
+      "title": "string (max 100 chars)",
+      "description": "string (max 200 chars)",
+      "path": "string (URL path)",
+      "imageUrl": "string (optional)"
+    }
+  ],
+  "bookTitle": "string",
+  "subtitle": "string",
+  "readMorePath": "string"
+}
+```
+
+### Error Responses
+- **404**: If modules data is not found
+- **500**: Internal server error
+
+## Homepage Content Endpoint
+
+**GET** `/api/homepage`
+
+### Description
+Retrieves the main homepage content including book title, subtitle, and read more path.
+
+### Request
+- **Method**: GET
+- **Path**: `/api/homepage`
+- **Headers**: None required
+- **Parameters**: None
+
+### Response
+- **Status**: 200 OK
+- **Content-Type**: application/json
+
+### Response Schema
+```json
+{
+  "title": "string",
+  "subtitle": "string",
+  "readMorePath": "string",
+  "modules": "[Module Schema defined above]"
+}
+```
