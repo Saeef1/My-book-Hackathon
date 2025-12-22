@@ -1,6 +1,6 @@
 import React from 'react';
 import FloatingChatbot from '@site/src/components/FloatingChatbot';
-import { useDocusaurusContext } from '@docusaurus/core';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 // Default wrapper for the whole Docusaurus site
 export default function Root({ children }: { children: React.ReactNode }) {
