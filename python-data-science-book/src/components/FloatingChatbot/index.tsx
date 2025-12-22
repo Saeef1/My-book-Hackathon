@@ -18,7 +18,7 @@ type FloatingChatbotProps = {
 };
 
 const FloatingChatbot: React.FC<FloatingChatbotProps> = ({
-  backendUrl = 'https://saeef-backend-space.hf.space',
+  backendUrl = process.env.REACT_APP_RAG_API_URL ,
   title = 'Documentation Assistant',
   description = 'Ask me anything about the Python Data Science Book'
 }) => {
