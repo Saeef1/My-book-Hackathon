@@ -4,6 +4,9 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+// Load environment variables
+require('dotenv').config();
+
 const config: Config = {
   title: 'Python Data Science Textbook',
   tagline: 'A Comprehensive Guide to Python for Data Science',
@@ -138,6 +141,11 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+
+  // Pass environment variables to client
+  customFields: {
+    ragApiUrl: process.env.REACT_APP_RAG_API_URL || 'https://saeef-backend-space.hf.space',
+  },
 };
 
 export default config;
